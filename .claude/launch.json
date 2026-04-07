@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "HireTrail API",
+      "runtimeExecutable": "venv/bin/python",
+      "runtimeArgs": ["-m", "uvicorn", "app.main:app", "--reload", "--port", "8000"],
+      "port": 8000
+    }
+  ,
+    {
+      "name": "HireTrail UI",
+      "runtimeExecutable": "venv/bin/streamlit",
+      "runtimeArgs": ["run", "streamlit_app.py", "--server.port", "8501"],
+      "port": 8501
+    }
+  ]
+}
