@@ -49,7 +49,7 @@ The backend follows a strict 4-layer separation: **Router → CRUD → Model →
 
 ```bash
 # 1. Clone and create virtual environment
-git clone https://github.com/goldenfishome/hiretrail
+git clone https://github.com/goldenfishome/HireTrail
 cd hiretrail
 python -m venv venv
 source venv/bin/activate
