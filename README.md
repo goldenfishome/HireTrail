@@ -2,6 +2,10 @@
 
 A job search tracker with a FastAPI backend and Streamlit frontend. Track companies, job applications, and interview rounds — with CSV import, status filtering, and a live dashboard.
 
+**Live demo:**
+- 🖥️ [Dashboard](https://goldenfishome-hiretrail-streamlit-app-58tcdl.streamlit.app/) — Streamlit UI
+- 📡 [API docs](https://hiretrail-api-d8z8.onrender.com/docs) — Interactive FastAPI documentation
+
 ## Tech stack
 
 | Layer | Technology |
@@ -45,7 +49,7 @@ The backend follows a strict 4-layer separation: **Router → CRUD → Model →
 
 ```bash
 # 1. Clone and create virtual environment
-git clone <repo-url>
+git clone https://github.com/goldenfishome/hiretrail
 cd hiretrail
 python -m venv venv
 source venv/bin/activate
