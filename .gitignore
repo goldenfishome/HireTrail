@@ -10,3 +10,4 @@ dist/
 *.egg-info/
 .streamlit/secrets.toml
 .claude/
+CLAUDE.md
