@@ -183,8 +183,10 @@ elif page == "📋 Applications":
                 status = st.selectbox("Status", STATUS_OPTIONS, index=1)
                 source = st.text_input("Source  (e.g. LinkedIn, Referral)")
             with col2:
-                company_options = ["— None —"] + [c["name"] for c in companies]
-                selected_company = st.selectbox("Company (optional)", company_options)
+                company_name_input = st.text_input(
+                    "Company (optional)",
+                    placeholder="Type a name — existing or new",
+                )
                 applied_date = st.date_input("Date Applied", value=date.today())
                 salary_min = st.number_input("Salary Min ($)", min_value=0, step=1000)
                 salary_max = st.number_input("Salary Max ($)", min_value=0, step=1000)
@@ -197,9 +199,24 @@ elif page == "📋 Applications":
             elif salary_min and salary_max and salary_min > salary_max:
                 st.error("Salary min must be ≤ salary max.")
             else:
-                comp_id = next(
-                    (c["id"] for c in companies if c["name"] == selected_company), None
-                )
+                # Resolve company: find existing (case-insensitive) or create new
+                comp_id = None
+                typed_name = company_name_input.strip()
+                if typed_name:
+                    existing = next(
+                        (c for c in companies if c["name"].lower() == typed_name.lower()),
+                        None,
+                    )
+                    if existing:
+                        comp_id = existing["id"]
+                    else:
+                        new_co = api_post("/companies/", {"name": typed_name})
+                        if new_co.ok:
+                            comp_id = new_co.json()["id"]
+                        else:
+                            st.error(f"Could not create company: {new_co.json().get('detail', '')}")
+                            st.stop()
+
                 r = api_post("/applications/", {
                     "company_id": comp_id,
                     "role_title": role_title.strip(),
@@ -212,7 +229,10 @@ elif page == "📋 Applications":
                     "notes": notes.strip() or None,
                 })
                 if r.ok:
-                    st.success("✅ Application added!")
+                    if typed_name and not existing:
+                        st.success(f"✅ Application added! New company **{typed_name}** was also created.")
+                    else:
+                        st.success("✅ Application added!")
                     st.rerun()
                 else:
                     st.error(f"Error: {r.json().get('detail', 'Unknown error')}")
