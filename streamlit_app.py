@@ -25,19 +25,22 @@ st.set_page_config(page_title="HireTrail", page_icon="🎯", layout="wide")
 
 def api_get(path, params=None):
     try:
-        r = requests.get(f"{API_BASE}{path}", params=params, timeout=5)
+        r = requests.get(f"{API_BASE}{path}", params=params, timeout=60)
         return r.json() if r.ok else []
     except requests.exceptions.ConnectionError:
         st.error("⚠️ Cannot reach the API. Make sure HireTrail API is running on port 8000.")
         return []
+    except requests.exceptions.ReadTimeout:
+        st.warning("⏳ The API is waking up (Render free tier). Please wait a moment and refresh.")
+        return []
 
 
 def api_post(path, data):
-    return requests.post(f"{API_BASE}{path}", json=data, timeout=5)
+    return requests.post(f"{API_BASE}{path}", json=data, timeout=60)
 
 
 def api_put(path, data):
-    return requests.put(f"{API_BASE}{path}", json=data, timeout=5)
+    return requests.put(f"{API_BASE}{path}", json=data, timeout=60)
 
 
 def api_delete(path):
